@@ -1,0 +1,53 @@
+﻿using UnityEngine;
+using Unity.Physics;
+using Unity.Mathematics;
+using Core.Extensions;
+using Unity.Physics.Authoring;
+using Core.Extensions.ACollider;
+
+namespace Core.CropSection
+{
+	public class CropSectionComponent : MonoBehaviour
+	{
+		public CropSection3DClass cropSection = new CropSection3DClass(true);
+		private Mesh BoundsMesh = null;
+		private Mesh CropBoundsMesh = null;
+		private void OnDrawGizmos()
+		{
+			if (cropSection != null)
+			{
+				if (cropSection.Bounds.IsValid() && cropSection.CropSectionBounds.IsValid())
+				{
+					Gizmos.color = Color.green;
+					cropSection.Bounds.GenerateMeshEquivalent(ref BoundsMesh);
+					Gizmos.DrawWireMesh(BoundsMesh, cropSection.CropSection.Bounds.transform.pos, math.normalize(cropSection.CropSection.Bounds.transform.rot));
+					Gizmos.color = Color.blue;
+			//		Debug.Log("aa:"+cropSection.CropSection.CropBounds.transform.ToString()+",,,"+cropSection.CropSectionBounds.collider.transform.ToString());
+					cropSection.CropSectionBounds.GenerateMeshEquivalent(ref CropBoundsMesh);
+					Gizmos.DrawWireMesh(CropBoundsMesh, cropSection.CropSection.CropBounds.transform.pos, math.normalize(cropSection.CropSection.CropBounds.transform.rot));
+
+				}
+			}
+		//	else Debug.LogWarning("can't draw gizmo");
+		}
+
+		private void Reset()
+		{
+			cropSection = new CropSection3DClass();
+			BoundsMesh = null;
+			CropBoundsMesh = null;
+		}
+
+		// Use this for initialization
+		void Start()
+		{
+			
+		}
+
+		// Update is called once per frame
+		void Update()
+		{
+
+		}
+	}
+}
